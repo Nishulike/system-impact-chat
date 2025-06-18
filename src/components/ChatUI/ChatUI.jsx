@@ -9,6 +9,7 @@ const ChatUI = ({ sessionId }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const welcomeMessage = {
     sender: "system",
@@ -37,14 +38,12 @@ const ChatUI = ({ sessionId }) => {
 ✍️ **Please provide your change request below to begin!**`,
   };
 
-  // Show welcome message + load stored messages
   useEffect(() => {
     const stored = localStorage.getItem(`messages-${sessionId}`);
     const previous = stored ? JSON.parse(stored) : [];
     setMessages([welcomeMessage, ...previous]);
   }, [sessionId]);
 
-  // Save user/system messages (excluding welcome) to localStorage
   useEffect(() => {
     const filtered = messages.filter(
       (msg) => !(msg.sender === "system" && msg.text === welcomeMessage.text)
@@ -52,11 +51,13 @@ const ChatUI = ({ sessionId }) => {
     localStorage.setItem(`messages-${sessionId}`, JSON.stringify(filtered));
   }, [messages, sessionId]);
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    const input = e.target.message.value.trim();
-    if (!input) return;
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, loading]);
 
+  const sendMessage = async (input) => {
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     setLoading(true);
@@ -71,9 +72,7 @@ const ChatUI = ({ sessionId }) => {
           session_id: sessionId,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
@@ -85,7 +84,7 @@ const ChatUI = ({ sessionId }) => {
         try {
           const parsed = JSON.parse(cleaned);
           if (parsed.status === "clarification_needed") {
-            reply = `🟡 **Clarification Needed**\n\n**Q:** ${parsed.clarification_question}\n\n💡 *Suggested:* ${parsed.suggested_value || "N/A"}`;
+            reply = `🟡 **Clarification Needed**\n\n**Q:** ${parsed.clarification_question}\n\n💡 *Suggested:* ${parsed.suggested_value || "N/A"}\n\n➤ Do you want to add this? (yes / no / explain more)`;
           } else if (parsed.status === "complete" && parsed.document_payload) {
             reply = "✅ System Impact Report is ready. Click below to download.";
           } else {
@@ -106,15 +105,29 @@ const ChatUI = ({ sessionId }) => {
       ]);
     } finally {
       setLoading(false);
-      e.target.reset();
     }
   };
 
-  useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, loading]);
+  const handleSend = (e) => {
+    e.preventDefault();
+    const input = inputRef.current.value.trim();
+    if (!input) return;
+    inputRef.current.value = "";
+    sendMessage(input);
+  };
+
+  const handleClarificationClick = (choice) => {
+    let emoji = "❓";
+    if (choice === "yes") emoji = "✅";
+    else if (choice === "no") emoji = "❌";
+    else if (choice === "explain more") emoji = "ℹ️";
+
+    sendMessage(emoji);
+  };
+
+  const handleFeedbackClick = (emoji) => {
+    sendMessage(emoji);
+  };
 
   return (
     <div className="chat-window">
@@ -122,7 +135,13 @@ const ChatUI = ({ sessionId }) => {
 
       <div className="chat-body">
         {messages.map((msg, i) => (
-          <MessageBubble key={i} sender={msg.sender} text={msg.text} />
+          <MessageBubble
+            key={i}
+            sender={msg.sender}
+            text={msg.text}
+            onClarificationClick={handleClarificationClick}
+            onFeedbackClick={handleFeedbackClick}
+          />
         ))}
         {loading && <TypingIndicator />}
         <div ref={chatEndRef} />
@@ -133,6 +152,7 @@ const ChatUI = ({ sessionId }) => {
           name="message"
           placeholder="Type your request..."
           autoComplete="off"
+          ref={inputRef}
         />
         <button type="submit">➤</button>
       </form>

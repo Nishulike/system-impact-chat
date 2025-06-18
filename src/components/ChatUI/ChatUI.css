@@ -5,6 +5,7 @@
   color: white;
   overflow: hidden;
   position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* TOGGLE BUTTONS */
@@ -17,8 +18,8 @@
   background-color: #1e293b;
   color: white;
   border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -29,6 +30,7 @@
   background-color: #334155;
 }
 
+/* SESSION SIDEBAR */
 .sidebar-hidden .session-sidebar {
   display: none;
 }
@@ -36,7 +38,6 @@
   flex: 1 1 100%;
 }
 
-/* SESSION SIDEBAR */
 .session-sidebar {
   width: 260px;
   background-color: #1e293b;
@@ -45,7 +46,6 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  position: relative;
 }
 
 .sidebar-header {
@@ -74,7 +74,6 @@
   margin-bottom: 12px;
   color: #f8fafc;
   text-align: center;
-  flex: 1;
 }
 
 .new-session-btn {
@@ -169,24 +168,25 @@
   background-color: #0f172a;
   text-align: center;
   color: white;
+  border-bottom: 1px solid #1e293b;
 }
 
 .chat-body {
   flex: 1;
-  padding: 15px;
+  padding: 16px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   scrollbar-width: none;
 }
 
 .message-bubble {
   max-width: 80%;
-  padding: 10px 16px;
-  border-radius: 18px;
-  font-size: 0.95rem;
-  line-height: 1.4;
+  padding: 12px 18px;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
   animation: fadeIn 0.3s ease;
   word-wrap: break-word;
   word-break: break-word;
@@ -202,16 +202,47 @@
   color: white;
 }
 
+/* Feedback Buttons */
+.feedback-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  margin-left: 10px;
+}
+
+.thumb-button {
+  background-color: transparent;
+  border: 1px solid #cbd5e1;
+  color: #f1f5f9;
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.thumb-button:hover {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.thumb-up::before {
+  content: '👍 ';
+}
+.thumb-down::before {
+  content: '👎 ';
+}
+
+/* Chat Input */
 .chat-input-area {
   display: flex;
   padding: 12px;
   background: #0f172a;
   gap: 10px;
-  flex-wrap: nowrap;
+  border-top: 1px solid #1e293b;
 }
 .chat-input-area input {
   flex: 1;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 999px;
   border: none;
   background-color: #1e293b;
@@ -223,7 +254,7 @@
   color: white;
   border: none;
   border-radius: 999px;
-  padding: 10px 18px;
+  padding: 12px 20px;
   cursor: pointer;
   font-size: 1.2rem;
 }
@@ -231,6 +262,7 @@
   background-color: #2563eb;
 }
 
+/* Typing Indicator */
 .typing-indicator {
   display: flex;
   gap: 4px;
@@ -250,11 +282,12 @@
   animation-delay: 0.4s;
 }
 
+/* Download Button */
 .download-button {
   background-color: #14b8a6;
   border: none;
-  margin: 12px auto;
-  padding: 12px 24px;
+  margin: 16px auto;
+  padding: 14px 26px;
   border-radius: 12px;
   font-size: 1rem;
   color: white;
