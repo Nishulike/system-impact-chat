@@ -1,0 +1,38 @@
+.chat-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #0f172a;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hidden sidebar mode */
+.chat-wrapper.sidebar-hidden .session-sidebar {
+  display: none;
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  background-color: #1e293b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background-color: #334155;
+}
+
+/* Ensure chat window uses full width when sidebar is hidden */
+.chat-wrapper.sidebar-hidden .chat-window {
+  width: 100%;
+}
