@@ -8,13 +8,20 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* TOGGLE BUTTONS */
-.sidebar-toggle,
+/* HIDE SIDEBAR MODE */
+.sidebar-hidden .session-sidebar {
+  display: none;
+}
+.sidebar-hidden .chat-window {
+  flex: 1 1 100%;
+}
+
+/* OPEN SIDEBAR BUTTON */
 .open-sidebar-btn {
   position: absolute;
   top: 14px;
   left: 14px;
-  z-index: 999;
+  z-index: 1000;
   background-color: #1e293b;
   color: white;
   border: none;
@@ -25,19 +32,12 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition: background-color 0.3s ease;
 }
-.sidebar-toggle:hover,
+
 .open-sidebar-btn:hover {
   background-color: #334155;
 }
 
 /* SESSION SIDEBAR */
-.sidebar-hidden .session-sidebar {
-  display: none;
-}
-.sidebar-hidden .chat-window {
-  flex: 1 1 100%;
-}
-
 .session-sidebar {
   width: 260px;
   background-color: #1e293b;
@@ -224,7 +224,6 @@
   background-color: #3b82f6;
   color: white;
 }
-
 .thumb-up::before {
   content: '👍 ';
 }
@@ -331,6 +330,13 @@
   .chat-window {
     width: 100%;
     height: calc(100vh - 120px);
+  }
+
+  .open-sidebar-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1000;
   }
 }
 

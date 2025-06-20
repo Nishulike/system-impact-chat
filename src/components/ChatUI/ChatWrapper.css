@@ -12,27 +12,28 @@
   display: none;
 }
 
-/* Sidebar toggle button */
-.sidebar-toggle {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 20;
-  background-color: #1e293b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.sidebar-toggle:hover {
-  background-color: #334155;
-}
-
 /* Ensure chat window uses full width when sidebar is hidden */
 .chat-wrapper.sidebar-hidden .chat-window {
   width: 100%;
+}
+
+/* Sidebar Open Button */
+.open-sidebar-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  background-color: #1e293b;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.3s ease;
+}
+
+.open-sidebar-btn:hover {
+  background-color: #334155;
 }

@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import SessionSidebar from "./SessionSidebar";
 import ChatUI from "./ChatUI";
 import "./ChatUI.css";
+import "./ChatWrapper.css"; // Ensure correct file name casing
 
 const ChatWrapper = () => {
   const [sessions, setSessions] = useState([]);
   const [activeSession, setActiveSession] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   const generateId = () => `sess-${Date.now()}`;
 
@@ -21,11 +23,14 @@ const ChatWrapper = () => {
       setSessions(stored);
       setActiveSession(stored[0].id);
     }
+    setInitialized(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("chat_sessions", JSON.stringify(sessions));
-  }, [sessions]);
+    if (initialized) {
+      localStorage.setItem("chat_sessions", JSON.stringify(sessions));
+    }
+  }, [sessions, initialized]);
 
   const handleRename = (id) => {
     const newName = prompt("Rename session:");
@@ -37,11 +42,15 @@ const ChatWrapper = () => {
   };
 
   const handleDelete = (id) => {
-    const filtered = sessions.filter((s) => s.id !== id);
-    setSessions(filtered);
-    if (id === activeSession && filtered.length > 0) {
-      setActiveSession(filtered[0].id);
-    } else if (filtered.length === 0) {
+    // Remove session and its messages locally
+    localStorage.removeItem(`messages-${id}`);
+    const updated = sessions.filter((s) => s.id !== id);
+    setSessions(updated);
+
+    // Update active session
+    if (id === activeSession && updated.length > 0) {
+      setActiveSession(updated[0].id);
+    } else if (updated.length === 0) {
       const newSess = { id: generateId(), name: "New Session" };
       setSessions([newSess]);
       setActiveSession(newSess.id);
@@ -55,8 +64,8 @@ const ChatWrapper = () => {
   };
 
   return (
-    <div className="chat-wrapper">
-      {showSidebar && (
+    <div className={`chat-wrapper ${!showSidebar ? "sidebar-hidden" : ""}`}>
+      {showSidebar && initialized && (
         <SessionSidebar
           sessions={sessions}
           activeSession={activeSession}
@@ -64,10 +73,13 @@ const ChatWrapper = () => {
           onRename={handleRename}
           onDelete={handleDelete}
           onNew={handleNewSession}
-          onToggle={() => setShowSidebar(false)} // 👈 Close button inside sidebar
+          onToggle={() => setShowSidebar(false)}
         />
       )}
-      {!showSidebar && (
+
+      <ChatUI sessionId={activeSession} />
+
+      {!showSidebar && initialized && (
         <button
           className="open-sidebar-btn"
           onClick={() => setShowSidebar(true)}
@@ -75,7 +87,6 @@ const ChatWrapper = () => {
           📂 Open Sidebar
         </button>
       )}
-      <ChatUI sessionId={activeSession} />
     </div>
   );
 };
