@@ -1,12 +1,21 @@
 // 📁 File: src/App.js
 import React from "react";
-import ChatWrapper from "./components/ChatUI/ChatWrapper"; // ✅ Use the wrapper
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ChatWrapper from "./components/ChatUI/ChatWrapper";
+import StartWindow from "./components/StartWindow/StartWindow"; // ✅ Import the new component
 import "./App.css";
 import "./components/ChatUI/ChatUI.css";
-import "./components/ChatUI/ChatWrapper.css"; // ✅ Ensure wrapper styles are loaded
+import "./components/ChatUI/ChatWrapper.css";
 
 function App() {
-  return <ChatWrapper />; // ✅ This wraps SessionSidebar + ChatUI with toggle logic
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<StartWindow />} />
+        <Route path="/chat" element={<ChatWrapper />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

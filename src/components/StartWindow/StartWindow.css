@@ -1,0 +1,163 @@
+/* Background video */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+/* Main Container */
+.start-window {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4vh 2vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+.start-title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 4vh;
+  text-align: center;
+}
+
+.feature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+  max-width: 1200px;
+  width: 100%;
+  z-index: 2;
+}
+
+.feature-card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Card Design */
+.feature-card {
+  background: #1e293b;
+  border-radius: 18px;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.35);
+  width: 260px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  z-index: 2;
+}
+
+.feature-card:hover {
+  background: #334155;
+  transform: translateY(-4px);
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Popup below the card */
+.feature-popup {
+  position: absolute;
+  top: 100%;
+  margin-top: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 3;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feature-card-wrapper:hover .feature-popup {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(4px);
+}
+
+/* Arrow pointing up (curved like a message tail) */
+.popup-arrow {
+  width: 20px;
+  height: 20px;
+  background: #0f172a;
+  transform: rotate(45deg);
+  position: absolute;
+  top: -10px;
+  left: calc(50% - 10px);
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+
+/* Message Bubble */
+.popup-content {
+  background: #0f172a;
+  padding: 16px 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  font-size: 0.95rem;
+  text-align: center;
+  z-index: 1;
+  max-width: 280px;
+}
+
+.popup-content p {
+  margin: 0;
+  margin-bottom: 10px;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.popup-content button {
+  margin-top: 4px;
+  padding: 8px 14px;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popup-content button:hover {
+  background-color: #2563eb;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .feature-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .feature-card {
+    width: 90%;
+  }
+
+  .feature-popup {
+    width: 90%;
+  }
+}
