@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import axios from "axios";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
@@ -11,7 +11,8 @@ const ChatUI = ({ sessionId }) => {
   const chatEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const welcomeMessage = {
+  // ✅ Memoize welcomeMessage to avoid ESLint warning and unnecessary re-renders
+  const welcomeMessage = useMemo(() => ({
     sender: "system",
     text: `👋 Hello! I’m your **System Impact Analyst Assistant**.
 
@@ -36,20 +37,20 @@ const ChatUI = ({ sessionId }) => {
 📄 At the end, you can **generate a professional System Impact Report**.
 
 ✍️ **Please provide your change request below to begin!**`,
-  };
+  }), []);
 
   useEffect(() => {
     const stored = localStorage.getItem(`messages-${sessionId}`);
     const previous = stored ? JSON.parse(stored) : [];
     setMessages([welcomeMessage, ...previous]);
-  }, [sessionId]);
+  }, [sessionId, welcomeMessage]);
 
   useEffect(() => {
     const filtered = messages.filter(
       (msg) => !(msg.sender === "system" && msg.text === welcomeMessage.text)
     );
     localStorage.setItem(`messages-${sessionId}`, JSON.stringify(filtered));
-  }, [messages, sessionId]);
+  }, [messages, sessionId, welcomeMessage.text]);
 
   useEffect(() => {
     if (chatEndRef.current) {
@@ -121,7 +122,6 @@ const ChatUI = ({ sessionId }) => {
     if (choice === "yes") emoji = "✅";
     else if (choice === "no") emoji = "❌";
     else if (choice === "explain more") emoji = "ℹ️";
-
     sendMessage(emoji);
   };
 
