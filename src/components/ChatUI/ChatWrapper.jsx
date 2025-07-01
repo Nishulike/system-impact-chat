@@ -1,9 +1,12 @@
 // 📁 File: src/components/ChatUI/ChatWrapper.jsx
 import React, { useState, useEffect } from "react";
+import { Box, Fab, Tooltip } from "@mui/material";
+import { motion, AnimatePresence } from "framer-motion";
+import { FolderOpen } from "@mui/icons-material";
 import SessionSidebar from "./SessionSidebar";
 import ChatUI from "./ChatUI";
 import "./ChatUI.css";
-import "./ChatWrapper.css"; // Ensure correct file name casing
+import "./ChatWrapper.css";
 
 const ChatWrapper = () => {
   const [sessions, setSessions] = useState([]);
@@ -64,30 +67,74 @@ const ChatWrapper = () => {
   };
 
   return (
-    <div className={`chat-wrapper ${!showSidebar ? "sidebar-hidden" : ""}`}>
-      {showSidebar && initialized && (
-        <SessionSidebar
-          sessions={sessions}
-          activeSession={activeSession}
-          onSelect={setActiveSession}
-          onRename={handleRename}
-          onDelete={handleDelete}
-          onNew={handleNewSession}
-          onToggle={() => setShowSidebar(false)}
-        />
-      )}
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Sidebar */}
+      <AnimatePresence>
+        {showSidebar && initialized && (
+          <SessionSidebar
+            sessions={sessions}
+            activeSession={activeSession}
+            onSelect={setActiveSession}
+            onRename={handleRename}
+            onDelete={handleDelete}
+            onNew={handleNewSession}
+            onToggle={() => setShowSidebar(false)}
+          />
+        )}
+      </AnimatePresence>
 
-      <ChatUI sessionId={activeSession} />
+      {/* Main Chat Area */}
+      <Box
+        sx={{
+          flex: 1,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <ChatUI sessionId={activeSession} />
+      </Box>
 
+      {/* Floating Sidebar Toggle Button */}
       {!showSidebar && initialized && (
-        <button
-          className="open-sidebar-btn"
-          onClick={() => setShowSidebar(true)}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          style={{
+            position: "absolute",
+            top: 20,
+            left: 20,
+            zIndex: 1000,
+          }}
         >
-          📂 Open Sidebar
-        </button>
+          <Tooltip title="Open Sessions" placement="right">
+            <Fab
+              size="medium"
+              onClick={() => setShowSidebar(true)}
+              sx={{
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "#fff",
+                "&:hover": {
+                  background: "rgba(255,255,255,0.2)",
+                  transform: "scale(1.1)",
+                },
+              }}
+            >
+              <FolderOpen />
+            </Fab>
+          </Tooltip>
+        </motion.div>
       )}
-    </div>
+    </Box>
   );
 };
 
